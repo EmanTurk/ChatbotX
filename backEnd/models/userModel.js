@@ -1,7 +1,15 @@
 import mongoose from "mongoose";
 
 // schema: name, description, category, age, date, location and image.
-
+const skillEnum = [
+  "Community Clean-Up",
+  "Educational Tutoring",
+  "Elderly Assistance",
+  "Animal Welfare",
+  "Food Distribution",
+  "Event Volunteering",
+  "Gardening",
+];
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -21,11 +29,16 @@ const userSchema = new mongoose.Schema({
   description: {
     type: String,
   },
-  category: {
-    type: String,
-  },
   image: {
     type: String,
+  },
+  skills: {
+    type: [
+      {
+        type: String,
+        enum: skillEnum,
+      },
+    ],
   },
 });
 
