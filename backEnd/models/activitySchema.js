@@ -8,11 +8,11 @@ const ActivitySchema = new mongoose.Schema({
     },
     description: {
         type: String,
-        required: true
+        required: [true, "Should add proper description"]
     },
     category: { 
         type: String,
-        required: true
+        required: [true, "Should define category name"]
     },
     volunteersNeeded: Number,
     volunteersAttending: Number,
@@ -24,15 +24,12 @@ const ActivitySchema = new mongoose.Schema({
             latitude: Number,
             longitude: Number    
         },
-        required: true
+        required: [true, "Should assign location variables"]
     },
     images: [{
         fileName: String
-        // We could add a description to each image
     }],
-    volunteers: [{
-        type: String
-    }]
+
 });
 
 const Activity = mongoose.model('Activity', ActivitySchema);
