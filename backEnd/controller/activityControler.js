@@ -68,6 +68,35 @@ export const announcedActivity = async (req, res, next) => {
   }
 };
 
+// update activity satus
+
+export const updateActivity = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { name, description, category, location } = req.body;
+    if (!isValidObjectId(id)) {
+      throw new Error("ID not Valid");
+    }
+    const activity = await Activity.findById(id);
+
+    //does the activity exist ?
+    if (!activity) {
+      res.status(404);
+      throw new Error("Activity not found");
+    }
+    //edit the activity
+    activity.name = name;
+    activity.location = location;
+    activity.category = category;
+    activity.description = description;
+
+    const updateActivity = await activity.save();
+    //send it back
+    res.send(updateActivity);
+  } catch (error) {
+    next(error);
+  }
+};
 // Controller to delete an activity by id
 export const deleteActivity = async (req, res, next) => {
   try {
