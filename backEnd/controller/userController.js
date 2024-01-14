@@ -40,7 +40,6 @@ export const registerUser = async (req, res) => {
   }
 };
 
-
 // @desc     Authenticate a user
 // @route    POST /api/v1/users/login
 // @access   Public
@@ -62,3 +61,69 @@ export const loginUser = async (req, res) => {
     res.status(STATUS_CODE.INTERNAL_SERVER_ERROR).send(error.message);
   }
 };
+
+// @desc     get all users
+// @route    GET /api/v1/users
+// @access   Public
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find({});
+    // const users = await User.find({}).populate("activity"); // Populate the 'activity' field
+    res.status(STATUS_CODE.OK);
+    res.send(users);
+  } catch (error) {
+    res.status(STATUS_CODE.INTERNAL_SERVER_ERROR).send(error.message);
+  }
+};
+
+// @desc     get a User ById
+// @route    GET /api/v1/users/:id
+// @access   Public
+export const getUserById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id);
+    if (!user) {
+      res.status(STATUS_CODE.NOT_FOUND);
+      throw new Error("No such user in the db");
+    }
+    res.send(user);
+  } catch (error) {
+    res.status(STATUS_CODE.INTERNAL_SERVER_ERROR).send(error.message);
+  }
+};
+
+// @desc     update an existing user
+// @route    PUT /api/v1/users/:id
+// @access   Public
+export const updateUser = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const updatedUser = await User.findByIdAndUpdate(userId, req.body, {new: true});
+    if (!updatedUser) {
+      res.status(STATUS_CODE.NOT_FOUND);
+      throw new Error("No such user in the db");
+    }
+    car.owner = userId;
+    await car.save();
+    res.send(updatedUser);
+  } catch (error) {
+    res.status(STATUS_CODE.INTERNAL_SERVER_ERROR).send(error.message);
+  }
+};
+
+// @desc     delete an existing user
+// @route    DELETE /api/v1/users/:id
+// @access   Public
+
+export const deleteUser = async (req, res) => {
+  const {id} = req.params;
+  try {
+      const deletedUser = await User.findByIdAndDelete(id);
+      res.status(STATUS_CODE.OK).send(deletedUser);
+  } catch (error) {
+      // console.error('Error deleting user:', error);
+      res.status(STATUS_CODE.INTERNAL_SERVER_ERROR).send(error.message);
+  }
+}
