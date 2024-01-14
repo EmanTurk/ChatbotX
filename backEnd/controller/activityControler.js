@@ -3,6 +3,7 @@ import STATUS_CODE from "../constants/statusCodes.js";
 
 export const createActivity = async (req, res, next) => {
   try {
+    console.log(req.body);
     const { name, description, category, location } = req.body;
     const newActivity = await Activity.create({
       name,
