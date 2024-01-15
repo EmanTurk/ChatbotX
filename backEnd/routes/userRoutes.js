@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   deleteUser,
   getAllUsers,
+  getMostMatchUsers,
   getUserById,
   loginUser,
   registerUser,
@@ -16,7 +17,7 @@ router.post("/login", loginUser);
 router.get("/", getAllUsers);
 router.get("/:id", getUserById);
 
-// router.get("/getMostMatchUsers/:id", getMostMatchUsers);
+router.get("/getMostMatchUsers/:id", getMostMatchUsers);
 
 router.put("/:id", updateUser);
 

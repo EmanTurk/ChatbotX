@@ -128,3 +128,48 @@ export const deleteUser = async (req, res) => {
     res.status(STATUS_CODE.INTERNAL_SERVER_ERROR).send(error.message);
   }
 };
+
+// @desc     gets the users with the highest match based on a given user id
+// @route    GET /api/v1/users/getMostMatchUsers/:id
+// @access   Public
+
+export const getMostMatchUsers = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const user = await User.findById(id);
+    const users = await User.find({ _id: { $ne: id } });
+    const arrangedUsers = arrangeObjectsByCommonality(users, user);
+    res.status(STATUS_CODE.OK).send(arrangedUsers);
+  } catch (error) {
+    // console.error('Error deleting user:', error);
+    res.status(STATUS_CODE.INTERNAL_SERVER_ERROR).send(error.message);
+  }
+};
+
+function arrangeObjectsByCommonality(objectsArray, givenObject) {
+  // Convert the array of strings in the given object to a JSON string for comparison
+  const givenObjectString = JSON.stringify(givenObject);
+
+  // Create an array of objects with commonality information
+  const objectsWithCommonality = objectsArray.map((obj) => {
+    // Convert the array of strings in the current object to a JSON string for comparison
+    const objString = JSON.stringify(obj);
+
+    // Calculate the commonality by counting common elements
+    const commonality = obj.skills.reduce((count, skill) => {
+      return count + (givenObject.skills.includes(skill) ? 1 : 0);
+    }, 0);
+
+    return {
+      object: obj,
+      commonality: commonality,
+    };
+  });
+
+  // Sort the array in descending order based on commonality
+  const sortedObjects = objectsWithCommonality.sort(
+    (a, b) => b.commonality - a.commonality
+  );
+
+  return sortedObjects;
+}
