@@ -1,12 +1,14 @@
 import express from "express";
 import dotenv from "dotenv";
+import cors from "cors";
 const server = express();
 
 // import { errorHandler } from "./middleware/errorHandling.js";
 import connectDB from "./config/db.js";
-import usersRouter from './routes/userRoutes.js'
+import usersRouter from "./routes/userRoutes.js";
 
 dotenv.config();
+server.use(cors());
 
 server.use(express.json());
 

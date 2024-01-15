@@ -16,7 +16,7 @@ router.post("/login", loginUser);
 router.get("/", getAllUsers);
 router.get("/:id", getUserById);
 
-// router.get("/getMostMatchUser/:id", getMostMatchUser);
+// router.get("/getMostMatchUsers/:id", getMostMatchUsers);
 
 router.put("/:id", updateUser);
 
