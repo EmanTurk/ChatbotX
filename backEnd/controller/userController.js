@@ -1,5 +1,5 @@
-import STATUS_CODE from "../constants/statusCode.js";
-import User from "../models/userModel.js";
+import STATUS_CODE from "../constants/statusCodes.js";
+import User from "../models/userSchema.js";
 import { hash, compare } from "bcrypt";
 
 // @desc     Register new user
@@ -100,7 +100,9 @@ export const updateUser = async (req, res) => {
   try {
     const { userId } = req.params;
 
-    const updatedUser = await User.findByIdAndUpdate(userId, req.body, {new: true});
+    const updatedUser = await User.findByIdAndUpdate(userId, req.body, {
+      new: true,
+    });
     if (!updatedUser) {
       res.status(STATUS_CODE.NOT_FOUND);
       throw new Error("No such user in the db");
@@ -118,12 +120,12 @@ export const updateUser = async (req, res) => {
 // @access   Public
 
 export const deleteUser = async (req, res) => {
-  const {id} = req.params;
+  const { id } = req.params;
   try {
-      const deletedUser = await User.findByIdAndDelete(id);
-      res.status(STATUS_CODE.OK).send(deletedUser);
+    const deletedUser = await User.findByIdAndDelete(id);
+    res.status(STATUS_CODE.OK).send(deletedUser);
   } catch (error) {
-      // console.error('Error deleting user:', error);
-      res.status(STATUS_CODE.INTERNAL_SERVER_ERROR).send(error.message);
+    // console.error('Error deleting user:', error);
+    res.status(STATUS_CODE.INTERNAL_SERVER_ERROR).send(error.message);
   }
-}
+};
