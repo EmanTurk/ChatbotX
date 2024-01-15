@@ -98,17 +98,16 @@ export const getUserById = async (req, res) => {
 // @access   Public
 export const updateUser = async (req, res) => {
   try {
-    const { userId } = req.params;
+    const { id } = req.params;
 
-    const updatedUser = await User.findByIdAndUpdate(userId, req.body, {
+    const updatedUser = await User.findByIdAndUpdate(id, req.body, {
       new: true,
     });
     if (!updatedUser) {
       res.status(STATUS_CODE.NOT_FOUND);
       throw new Error("No such user in the db");
     }
-    car.owner = userId;
-    await car.save();
+
     res.send(updatedUser);
   } catch (error) {
     res.status(STATUS_CODE.INTERNAL_SERVER_ERROR).send(error.message);
